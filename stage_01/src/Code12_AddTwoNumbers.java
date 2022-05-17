@@ -8,7 +8,7 @@
  */
 public class Code12_AddTwoNumbers {
 
-    public class ListNode {
+    public static class ListNode {
 
         int val;
 
