@@ -58,9 +58,58 @@ public class Code15_BitAddMinusMuitiDiv {
         return res;
     }
 
+    /**
+     * 除法(正常情况下, 不涉及最小, 最小值无法取绝对值)
+     */
     public static int div(int a, int b) {
         int res = 0;
-        return res;
+
+        // 取绝对值
+        int x = isNeg(a) ? negNum(a) : a;
+        int y = isNeg(b) ? negNum(b) : b;
+
+        // x/y
+        for (int i = 30; i >= 0; i--) {
+            // 除法, x/y, x右移规避符号位问题
+            // e.g.:
+            //   0110000 -> x: 48
+            // / 0000110 -> y: 6
+            //      0110 x右移3位, 1<<3, 1000 -> 8
+            if ((x >> i) >= y) {
+                res |= (1 << i);
+                x = minus(x, y << i);
+            }
+        }
+
+        // 如果符号位不一样取负数
+        return isNeg(a) ^ isNeg(b) ? negNum(res) : res;
+    }
+
+    /**
+     * 除法(所有情况)
+     */
+    public static int divide(int a, int b) {
+		if (a == Integer.MIN_VALUE && b == Integer.MIN_VALUE) {
+			return 1;
+		} else if (b == Integer.MIN_VALUE) {
+			return 0;
+		} else if (a == Integer.MIN_VALUE) {
+			if (b == negNum(1)) {
+				return Integer.MAX_VALUE;
+			} else {
+				int c = div(add(a, 1), b);
+				return add(c, div(minus(a, multi(c, b)), b));
+			}
+		} else {
+			return div(a, b);
+		}
+	}
+
+    /**
+     * 是负数
+     */
+    public static boolean isNeg(int n) {
+        return n < 0;
     }
 
     /**
