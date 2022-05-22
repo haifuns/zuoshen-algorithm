@@ -97,6 +97,14 @@ public class Code15_BitAddMinusMuitiDiv {
 			if (b == negNum(1)) {
 				return Integer.MAX_VALUE;
 			} else {
+                // 特殊处理a为最小值无法取绝对值的情况, 绕过取系统最小绝对值
+                // 1. c = (a + 1) / 1
+                // 2. (a - (c * b)) / b + c
+
+                // e.g.:
+                // int -> -10 - 9, 求-10 / 2
+                // 1. c = (-10 + 1) / 2 = -9 / 2 = -4
+                // 2. -10 - (-4 * 2) = -2, -2 / 2 = -1, -4 + -1 = -5 -> -10 / 2 = -5
 				int c = div(add(a, 1), b);
 				return add(c, div(minus(a, multi(c, b)), b));
 			}
