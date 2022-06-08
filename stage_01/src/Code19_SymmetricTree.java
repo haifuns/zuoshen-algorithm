@@ -1,13 +1,12 @@
 /**
- * 100. 相同的树
+ * 101. 对称二叉树
  * 
- * https://leetcode.cn/problems/same-tree/
+ * https://leetcode.cn/problems/symmetric-tree/
  * 
  * @author haifuns
- * @date 2022-06-08 21:26
+ * @date 2022-06-08 22:15
  */
-public class Code18_SameTree {
-
+public class Code19_SymmetricTree {
     public static class TreeNode {
         int val;
         TreeNode left;
@@ -27,17 +26,19 @@ public class Code18_SameTree {
         }
     }
 
-    public boolean isSameTree(TreeNode p, TreeNode q) {
+    public boolean isSymmetric(TreeNode root) {
+        return isMirror(root, root);
+    }
 
-        if (p == null ^ q == null) {
+    public static boolean isMirror(TreeNode h1, TreeNode h2) {
+        if (h1 == null ^ h2 == null) {
             return false;
         }
 
-        if (p == null && q == null) {
+        if (h1 == null && h2 == null) {
             return true;
         }
 
-        return p.val == q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+        return h1.val == h2.val && isMirror(h1.left, h2.right) && isMirror(h1.right, h2.left);
     }
-    
 }
