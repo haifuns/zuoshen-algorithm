@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 105. 从前序与中序遍历序列构造二叉树
  * 
@@ -74,6 +77,41 @@ public class Code21_ConstructBinaryTreeFromPreorderAndInorderTraversal {
         // pre[l1+find-l2+1,r1], in[find+1,r2] 为右树
         head.left = f(pre, l1 + 1, l1 + find - l2, in, l2, find - 1);
         head.right = f(pre, l1 + find - l2 + 1, r1, in, find + 1, r2);
+
+        return head;
+    }
+
+    public TreeNode buildTreev2(int[] preorder, int[] inorder) {
+
+        if (preorder == null || inorder == null || preorder.length != inorder.length) {
+            return null;
+        }
+
+        Map<Integer, Integer> valueIndexMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            valueIndexMap.put(inorder[i], i);
+        }
+
+        return g(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1, valueIndexMap);
+    }
+
+    public static TreeNode g(int[] pre, int l1, int r1, int[] in, int l2, int r2, Map<Integer, Integer> valueIndexMap) {
+
+        if (l1 > r1) {
+            return null;
+        }
+
+        TreeNode head = new TreeNode(pre[l1]);
+
+        if (l1 == r1) {
+            return head;
+        }
+
+        // hash表优化, 不需要遍历
+        int find = valueIndexMap.get(pre[l1]);
+
+        head.left = g(pre, l1 + 1, l1 + find - l2, in, l2, find - 1, valueIndexMap);
+        head.right = g(pre, l1 + find - l2 + 1, r1, in, find + 1, r2, valueIndexMap);
 
         return head;
     }
