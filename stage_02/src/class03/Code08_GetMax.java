@@ -8,11 +8,10 @@ package class03;
  */
 public class Code08_GetMax {
 
-    public static void main(String[] args) {
-        int[] arr = {3,1,8,2,5,6,2,1,6,7};
-        int max = process(arr, 0, arr.length - 1);
-        System.out.println(max);
-    }
+    // 求arr中的最大值
+	public static int getMax(int[] arr) {
+		return process(arr, 0, arr.length - 1);
+	}
 
     // arr[l..r]位置找到最大值
     public static int process(int[] arr, int l, int r) {
