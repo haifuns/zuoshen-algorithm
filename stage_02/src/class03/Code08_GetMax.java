@@ -20,7 +20,7 @@ public class Code08_GetMax {
             return arr[l];
         }
 
-        // 重点
+        // 中点
         int mid = l + ((r - l) >> 1);
         int leftMax = process(arr, l, mid);
         int rightMax = process(arr, mid + 1, r);
