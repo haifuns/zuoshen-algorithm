@@ -1,4 +1,4 @@
-package class09;
+package class10;
 
 /**
  * 链表，链表相交
@@ -9,7 +9,7 @@ package class09;
  * @author haifuns
  * @date 2022-07-25 19:12
  */
-public class Code05_FindFirstIntersectNode {
+public class Code01_FindFirstIntersectNode {
 
     public static class Node {
         public int value;
