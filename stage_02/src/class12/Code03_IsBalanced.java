@@ -37,8 +37,29 @@ public class Code03_IsBalanced {
         return Math.max(leftHeight, rightHeight) + 1;
     }
 
+    // 递归套路
     public static boolean isBalanced2(Node head) {
         return process(head).isBalanced;
+    }
+
+    public static Info process(Node x) {
+        if (x == null) {
+            return new Info(true, 0);
+        }
+        Info leftInfo = process(x.left);
+        Info rightInfo = process(x.right);
+        int height = Math.max(leftInfo.height, rightInfo.height) + 1; // 当前节点高度
+        boolean isBalanced = true;
+        if (!leftInfo.isBalanced) { // 左树不平
+            isBalanced = false;
+        }
+        if (!rightInfo.isBalanced) { // 右树不平
+            isBalanced = false;
+        }
+        if (Math.abs(leftInfo.height - rightInfo.height) > 1) { // 左右高度差 > 1
+            isBalanced = false;
+        }
+        return new Info(isBalanced, height);
     }
 
     public static class Info {
@@ -50,27 +71,7 @@ public class Code03_IsBalanced {
             height = h;
         }
     }
-
-    public static Info process(Node x) {
-        if (x == null) {
-            return new Info(true, 0);
-        }
-        Info leftInfo = process(x.left);
-        Info rightInfo = process(x.right);
-        int height = Math.max(leftInfo.height, rightInfo.height) + 1;
-        boolean isBalanced = true;
-        if (!leftInfo.isBalanced) {
-            isBalanced = false;
-        }
-        if (!rightInfo.isBalanced) {
-            isBalanced = false;
-        }
-        if (Math.abs(leftInfo.height - rightInfo.height) > 1) {
-            isBalanced = false;
-        }
-        return new Info(isBalanced, height);
-    }
-
+    
     // for test
     public static Node generateRandomBST(int maxLevel, int maxValue) {
         return generate(1, maxLevel, maxValue);
