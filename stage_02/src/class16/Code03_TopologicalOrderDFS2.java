@@ -26,7 +26,7 @@ public class Code03_TopologicalOrderDFS2 {
 
 	public static class Record {
 		public DirectedGraphNode node; // 点
-		public long nodes; // 点次
+		public long nodes; // 点次，当前点子图所有的节点数
 
 		public Record(DirectedGraphNode n, long o) {
 			node = n;
@@ -42,7 +42,7 @@ public class Code03_TopologicalOrderDFS2 {
 		}
 	}
 
-	// dfs思路：统计每个点的点次，点次排序对应拓扑排序
+	// dfs思路：统计每个点的点次，点次排序高到低对应拓扑排序。点次：当前点子图所有的节点数。
 	public static ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
 		HashMap<DirectedGraphNode, Record> order = new HashMap<>();
 		for (DirectedGraphNode cur : graph) {
