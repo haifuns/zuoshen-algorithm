@@ -99,14 +99,14 @@ public class Code02_CardsInLine {
         int[][] fmap = new int[N][N];
         int[][] gmap = new int[N][N];
         for (int i = 0; i < N; i++) {
-            fmap[i][i] = arr[i]; // base case L=R 先手拿arr[i]，后手0
+            fmap[i][i] = arr[i]; // 初始化L=R 位置，先手arr[i]，后手0
         }
-        for (int startCol = 1; startCol < N; startCol++) {
+        for (int startCol = 1; startCol < N; startCol++) { // 列，1..n
             int L = 0;
             int R = startCol;
-            while (R < N) {
-                fmap[L][R] = Math.max(arr[L] + gmap[L + 1][R], arr[R] + gmap[L][R - 1]);
-                gmap[L][R] = Math.min(fmap[L + 1][R], fmap[L][R - 1]);
+            while (R < N) { // 沿着对角线推算，每次处理前一个位置右下位置，表格左下部分L>R无用
+                fmap[L][R] = Math.max(arr[L] + gmap[L + 1][R], arr[R] + gmap[L][R - 1]); // gmap 对应 fmap 位置，左一格、下一格
+                gmap[L][R] = Math.min(fmap[L + 1][R], fmap[L][R - 1]); // fmap 对应 gmap 位置，左一格、下一格
                 L++;
                 R++;
             }
