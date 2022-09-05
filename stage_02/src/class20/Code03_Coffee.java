@@ -5,17 +5,15 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
- * 暴力递归到动态规划，咖啡
+ * 暴力递归到动态规划，洗咖啡杯问题（京东）
  * 
  * @author haifuns
  * @date 2022-09-05 13:13
  */
 public class Code03_Coffee {
 
-    // 验证的方法
-	// 彻底的暴力
-	// 很慢但是绝对正确
-	public static int right(int[] arr, int n, int a, int b) {
+	// 暴力递归
+	public static int minTime0(int[] arr, int n, int a, int b) {
 		int[] times = new int[arr.length];
 		int[] drink = new int[n];
 		return forceMake(arr, times, 0, drink, n, a, b);
@@ -23,18 +21,18 @@ public class Code03_Coffee {
 
 	// 每个人暴力尝试用每一个咖啡机给自己做咖啡
 	public static int forceMake(int[] arr, int[] times, int kth, int[] drink, int n, int a, int b) {
-		if (kth == n) {
-			int[] drinkSorted = Arrays.copyOf(drink, kth);
+		if (kth == n) { // 所有咖啡制作完成，判断清洗杯子时间
+			int[] drinkSorted = Arrays.copyOf(drink, kth); // 每杯咖啡制作完成时间
 			Arrays.sort(drinkSorted);
 			return forceWash(drinkSorted, a, b, 0, 0, 0);
 		}
 		int time = Integer.MAX_VALUE;
-		for (int i = 0; i < arr.length; i++) {
-			int work = arr[i];
-			int pre = times[i];
-			drink[kth] = pre + work;
-			times[i] = pre + work;
-			time = Math.min(time, forceMake(arr, times, kth + 1, drink, n, a, b));
+		for (int i = 0; i < arr.length; i++) { // 每个咖啡机
+			int work = arr[i]; // 咖啡机需要的时间
+			int pre = times[i]; // 上一杯咖啡结束时间
+			drink[kth] = pre + work; // 当前杯咖啡制作完成时间
+			times[i] = pre + work; // 咖啡机排队时间
+			time = Math.min(time, forceMake(arr, times, kth + 1, drink, n, a, b)); // 下一杯咖啡所有可能..
 			drink[kth] = 0;
 			times[i] = pre;
 		}
@@ -82,7 +80,7 @@ public class Code03_Coffee {
 		for (int i = 0; i < arr.length; i++) {
 			heap.add(new Machine(0, arr[i]));
 		}
-		int[] drinks = new int[n];
+		int[] drinks = new int[n]; // 每个人喝完咖啡时间
 		for (int i = 0; i < n; i++) {
 			Machine cur = heap.poll();
 			cur.timePoint += cur.workTime;
@@ -103,11 +101,13 @@ public class Code03_Coffee {
 		}
 		// index号杯子 决定洗
 		int selfClean1 = Math.max(drinks[index], free) + wash;
+		// 剩余杯子干净时间
 		int restClean1 = bestTime(drinks, wash, air, index + 1, selfClean1);
 		int p1 = Math.max(selfClean1, restClean1);
 
 		// index号杯子 决定挥发
 		int selfClean2 = drinks[index] + air;
+		// 剩余杯子干净时间
 		int restClean2 = bestTime(drinks, wash, air, index + 1, free);
 		int p2 = Math.max(selfClean2, restClean2);
 		return Math.min(p1, p2);
@@ -136,8 +136,9 @@ public class Code03_Coffee {
 			maxFree = Math.max(maxFree, drinks[i]) + wash;
 		}
 		int[][] dp = new int[N + 1][maxFree + 1];
-		for (int index = N - 1; index >= 0; index--) {
-			for (int free = 0; free <= maxFree; free++) {
+		// 最下层都是0
+		for (int index = N - 1; index >= 0; index--) { // 从下往上填
+			for (int free = 0; free <= maxFree; free++) { // 从左往右填
 				int selfClean1 = Math.max(drinks[index], free) + wash;
 				if (selfClean1 > maxFree) {
 					break; // 因为后面的也都不用填了
@@ -183,7 +184,7 @@ public class Code03_Coffee {
 			int n = (int) (Math.random() * 7) + 1;
 			int a = (int) (Math.random() * 7) + 1;
 			int b = (int) (Math.random() * 10) + 1;
-			int ans1 = right(arr, n, a, b);
+			int ans1 = minTime0(arr, n, a, b);
 			int ans2 = minTime1(arr, n, a, b);
 			int ans3 = minTime2(arr, n, a, b);
 			if (ans1 != ans2 || ans2 != ans3) {
