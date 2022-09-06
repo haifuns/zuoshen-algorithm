@@ -1,12 +1,39 @@
 package class21;
 
 /**
- * 暴力递归到动态规划，最小距离累计和问题，空间压缩优化
+ * 暴力递归到动态规划，最小距离累计和问题，+空间压缩优化
  * 
  * @author haifuns
  * @date 2022-09-06 22:13
  */
 public class Code01_MinPathSum {
+
+    public static int minPathSum0(int[][] m) {
+        if (m == null || m.length == 0 || m[0] == null || m[0].length == 0) {
+            return 0;
+        }
+        int row = m.length;
+        int col = m[0].length;
+        return process(m, row - 1, col - 1);
+    }
+
+    public static int process(int[][] m, int row, int col) {
+        if (row < 0 || row > m.length || col < 0 || col > m[0].length) {
+            return 0;
+        }
+
+        if(row != 0 && col == 0) {
+            return process(m, row - 1, col) + m[row][col];  // 第0列，上边值 + 当前值
+        }
+
+        if(row == 0 && col != 0) {
+            return process(m, row, col - 1) + m[row][col];  // 第0行，左边值 + 当前值
+        }
+
+        int left = process(m, row, col - 1);
+        int up = process(m, row - 1, col);
+        return Math.min(left, up) + m[row][col];  // min(上边值, 左边值) + 当前值
+    }
 
     public static int minPathSum1(int[][] m) {
         if (m == null || m.length == 0 || m[0] == null || m[0].length == 0) {
@@ -17,14 +44,14 @@ public class Code01_MinPathSum {
         int[][] dp = new int[row][col];
         dp[0][0] = m[0][0];
         for (int i = 1; i < row; i++) {
-            dp[i][0] = dp[i - 1][0] + m[i][0]; // 第0列，上边值 + 当其值
+            dp[i][0] = dp[i - 1][0] + m[i][0]; // 第0列，上边值 + 当前值
         }
         for (int j = 1; j < col; j++) {
-            dp[0][j] = dp[0][j - 1] + m[0][j]; // 第0行，左边值 + 当其值
+            dp[0][j] = dp[0][j - 1] + m[0][j]; // 第0行，左边值 + 当前值
         }
         for (int i = 1; i < row; i++) { // 从上往下
             for (int j = 1; j < col; j++) { // 从左到右
-                dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + m[i][j]; // min(上边值, 左边值) + 当其值
+                dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + m[i][j]; // min(上边值, 左边值) + 当前值
             }
         }
         return dp[row - 1][col - 1]; // 右下角
@@ -47,7 +74,7 @@ public class Code01_MinPathSum {
             for (int j = 1; j < col; j++) { // 从左往右
                 // dp[j - 1] -> 当前位置左边值，更新过了
                 // dp[j] -> 当前位置上边值，没更新还是上一行的值
-                dp[j] = Math.min(dp[j - 1], dp[j]) + m[i][j]; // min(上边值, 左边值) + 当其值
+                dp[j] = Math.min(dp[j - 1], dp[j]) + m[i][j]; // min(上边值, 左边值) + 当前值
             }
         }
         return dp[col - 1];
@@ -81,6 +108,7 @@ public class Code01_MinPathSum {
         int rowSize = 10;
         int colSize = 10;
         int[][] m = generateRandomMatrix(rowSize, colSize);
+        System.out.println(minPathSum0(m));
         System.out.println(minPathSum1(m));
         System.out.println(minPathSum2(m));
 
